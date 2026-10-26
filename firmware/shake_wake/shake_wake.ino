@@ -155,7 +155,7 @@ void drawCardWithEye(bool blink){
 
 // 엎드려 잠드는 짧은 연출(약 1초)
 void playSleep(){
-  Serial.println(F("30초 경과 → 잠들기"));
+  Serial.println(F("30 s passed -> sleep"));
   drawCardWithEye(true); delay(350);            // 눈 감기
   oled.clearDisplay();                           // 엎드려 자기
   drawCat(CAT_SLEEP,CAT_SLEEP_W,CAT_SLEEP_H,CAT_SLEEP_AX,CAT_SLEEP_AY,33,62);
@@ -201,13 +201,13 @@ void enterShow(){
 }
 
 void wake(){
-  Serial.println(F("흔들림 감지 → 켜기"));
+  Serial.println(F("Shake detected -> wake up"));
   screenOn();
   playIntro();
   enterShow();
 }
 void goOff(){
-  Serial.println(F("→ OFF (흔들기 대기)"));
+  Serial.println(F("-> OFF (waiting for a shake)"));
   screenOff();
   clearPeaks();
   state = ST_OFF;
@@ -216,10 +216,10 @@ void goOff(){
 void setup(){
   Serial.begin(115200);
   Wire.begin(); Wire.setClock(400000);
-  if(!oled.begin(SSD1306_SWITCHCAPVCC,OLED_ADDR)){ Serial.println(F("OLED 실패")); return; }
-  if(!imuBegin()){ Serial.println(F("IMU 실패")); return; }
+  if(!oled.begin(SSD1306_SWITCHCAPVCC,OLED_ADDR)){ Serial.println(F("OLED not found")); return; }
+  if(!imuBegin()){ Serial.println(F("IMU not found")); return; }
   randomSeed(micros());
-  Serial.println(F("준비됨. 꺼진 상태 — 흔들어서 켜세요."));
+  Serial.println(F("Ready. Screen is off - shake to wake."));
   goOff();
 }
 
@@ -240,7 +240,7 @@ void loop(){
   // 흔들면 연출은 다시 안 하고, 꺼지는 타이머만 처음부터 다시 셈
   if(pollShake()){
     showStart = millis();
-    Serial.println(F("SHOW 중 흔들림 → 30초 타이머 리셋"));
+    Serial.println(F("Shake while showing -> 30 s timer reset"));
   }
 
   // 가끔 눈 깜빡임 (전환 시에만 다시 그림 → 깜빡임 최소)

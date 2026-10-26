@@ -71,7 +71,7 @@ def load_qr():
     path = "out/qr_oled.png"
     if os.path.exists(path):
         return Image.open(path).convert("1")
-    print("⚠️  out/qr_oled.png 없음 → 먼저 'python3 qr_gen.py' 실행하세요. (빈 박스로 대체)")
+    print("⚠️  out/qr_oled.png not found -> run 'python3 qr_gen.py' first. (Using a blank box for now)")
     im = Image.new("1", (64, 64), 1)
     return im
 

@@ -33,21 +33,21 @@ def build():
     qr_px = n * MODULE_PX                       # 여백 제외 QR 픽셀 크기
 
     print(f"URL         : {QR_URL}  ({len(QR_URL)} bytes)")
-    print(f"QR version  : {qr.version}  (모듈 {n}x{n})")
-    print(f"QR 크기     : {qr_px}x{qr_px}px  (모듈 {MODULE_PX}px 기준)")
+    print(f"QR version  : {qr.version}  ({n}x{n} modules)")
+    print(f"QR size     : {qr_px}x{qr_px}px  ({MODULE_PX}px per module)")
 
     # 64px 안에 센터링했을 때 양쪽 여백
     if qr_px > FIELD_PX:
         border = 0
-        print(f"⚠️  경고: QR {qr_px}px 가 {FIELD_PX}px 영역을 넘습니다! "
-              f"URL을 줄이거나 MODULE_PX=1 을 고려하세요. (일단 잘려서 생성)")
+        print(f"⚠️  Warning: QR {qr_px}px is larger than the {FIELD_PX}px area! "
+              f"Use a shorter URL or try MODULE_PX=1. (Generated anyway, cropped)")
     else:
         border = (FIELD_PX - qr_px) // 2
         qz_modules = border / MODULE_PX
-        print(f"흰 여백     : 양쪽 {border}px  (= {qz_modules:.1f} 모듈)")
+        print(f"White margin: {border}px each side  (= {qz_modules:.1f} modules)")
         if qz_modules < 2:
-            print(f"⚠️  참고: 여백이 권장(4모듈)보다 좁습니다. 흰 바탕이라 대개 읽히지만 "
-                  f"폰 스캔 테스트 필수. 안 읽히면 URL 단축을 권장.")
+            print(f"⚠️  Note: margin is narrower than the recommended 4 modules. It usually still scans, "
+                  f"but test with your phone. If it fails, use a shorter URL.")
 
     # --- OLED용 64x64 비트맵: 전부 흰색(1)에서 시작, QR 모듈만 검정(0) ---
     # (1 = 켜진 흰 픽셀 → OLED에서 빛남,  0 = 검정)
